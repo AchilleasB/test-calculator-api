@@ -1,10 +1,14 @@
-from fastapi import APIRouter, HTTPException
-from app.api.v1.schemas import CalculationRequest, CalculationResponse, OperationType
+from fastapi import APIRouter, HTTPException, Depends
+from app.api.v1.schemas import CalculationRequest, CalculationResponse, OperationType, HistoryResponse
 from app.service.calculator_service import CalculatorService
+from app.infrastructure.memory_repository import InMemoryHistoryRepository
 import uuid
+from typing import List
 
 router = APIRouter()
-service = CalculatorService()
+
+repository = InMemoryHistoryRepository()
+service = CalculatorService(repository)
 
 @router.post("/calculate", response_model=CalculationResponse)
 def calculate(request: CalculationRequest):
@@ -26,3 +30,11 @@ def calculate(request: CalculationRequest):
         result=result,
         operation=request.operation
     )
+
+@router.get("/history", response_model=HistoryResponse)
+def get_history():
+    records = service.list_history()
+    return HistoryResponse(records=records)
+
+
+

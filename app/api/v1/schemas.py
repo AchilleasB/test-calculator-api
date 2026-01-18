@@ -17,3 +17,9 @@ class CalculationResponse(BaseModel):
     result: float
     operation: OperationType
 
+class HistoryRecord(BaseModel):
+    id: UUID
+    summary: str
+
+class HistoryResponse(BaseModel):
+    records: list[HistoryRecord]

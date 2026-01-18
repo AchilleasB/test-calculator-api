@@ -3,10 +3,14 @@
 A minimal FastAPI application for testing purposes.
 
 ## Current Status
-**Phase:** 🔴 Red (History Feature)
-- Unit tests (`tests/unit/service/test_history.py`) failing (Service needs Repository).
-- Integration tests (`tests/integration/test_history_api.py`) failing (Endpoint missing).
-- Next Step: Implement History Repository and Service logic (Green Phase).
+**Phase:** Green (Refactor/Done)
+- All features implemented: Addition, Subtraction, Multiplication, Division.
+- History feature implemented with In-Memory repository.
+- All unit and integration tests are passing.
+
+## Features
+- **Arithmetic Operations:** `/api/v1/calculate`
+- **History Tracking:** `/api/v1/history` (Returns last operations with UUID and summary)
 
 ## Setup
 ```bash

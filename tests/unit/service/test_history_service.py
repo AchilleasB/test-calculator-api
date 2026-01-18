@@ -1,6 +1,6 @@
 from unittest.mock import Mock
 from app.service.calculator_service import CalculatorService
-from app.service.repository import HistoryRepository
+from app.repository.history_repository import HistoryRepository
 import pytest
 
 def test_addition_saves_to_history():
@@ -52,4 +52,3 @@ def test_division_error_does_not_save_history():
     # Assert
     mock_repo.save.assert_not_called()
     
-
