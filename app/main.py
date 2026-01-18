@@ -1,7 +1,6 @@
 from fastapi import FastAPI
+from app.api.v1.calculator import router as calculator_router
 
 app = FastAPI()
 
-@app.get("/")
-async def read_root():
-    return {"Hello": "World"}
+app.include_router(calculator_router, prefix="/api/v1")

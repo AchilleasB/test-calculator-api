@@ -68,7 +68,7 @@ def test_api_invalid_operation():
         "y": 3
     }
     response = client.post("/api/v1/calculate", json=payload)
-    assert response.status_code == 400
+    assert response.status_code == 422
     assert "detail" in response.json()
 
 def test_api_missing_parameters():
@@ -87,3 +87,4 @@ def test_api_non_numeric_parameters():
     }
     response = client.post("/api/v1/calculate", json=payload)
     assert response.status_code == 422
+    assert "detail" in response.json()
