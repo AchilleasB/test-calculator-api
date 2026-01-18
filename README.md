@@ -3,10 +3,10 @@
 A minimal FastAPI application for testing purposes.
 
 ## Current Status
-**Phase:** Refactor (TDD Cycle 1 Complete)
-- Code and tests refactored (Fixtures implemented, Clean Code).
-- Calculator Service and API are stable.
-- Next Step: Implement History Feature (Red Phase).
+**Phase:** 🔴 Red (History Feature)
+- Unit tests (`tests/unit/service/test_history.py`) failing (Service needs Repository).
+- Integration tests (`tests/integration/test_history_api.py`) failing (Endpoint missing).
+- Next Step: Implement History Repository and Service logic (Green Phase).
 
 ## Setup
 ```bash

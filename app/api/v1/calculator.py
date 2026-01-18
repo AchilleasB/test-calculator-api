@@ -23,7 +23,6 @@ def calculate(request: CalculationRequest):
             raise HTTPException(status_code=400, detail=str(e))
             
     return CalculationResponse(
-        id=uuid.uuid4(),
         result=result,
         operation=request.operation
     )

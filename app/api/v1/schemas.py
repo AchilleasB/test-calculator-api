@@ -14,11 +14,6 @@ class CalculationRequest(BaseModel):
     y: float = Field(..., gt=-1e12, lt=1e12)
 
 class CalculationResponse(BaseModel):
-    id: UUID
     result: float
     operation: OperationType
 
-class HistoryEntry(BaseModel):
-    id: UUID
-    operation: OperationType
-    result: float
