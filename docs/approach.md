@@ -1,5 +1,4 @@
 # Quality-First Calculator API
-
 The goal is to build a production-ready REST API that emphasizes maintainability and testability.
 
 ## Test-Driven Development (TDD)
