@@ -1,29 +1,24 @@
-[project]
+[tool.poetry]
 name = "test-calculator-api"
 version = "0.1.0"
-description = ""
-authors = [
-    {name = "Achilleas Ballanos",email = "686446@student.inholland.nl"}
-]
+description = "A minimal FastAPI calculator with history tracking"
+authors = ["Achilleas Ballanos <686446@student.inholland.nl>"]
 readme = "README.md"
-requires-python = ">=3.12"
-dependencies = [
-    "fastapi (>=0.128.0,<0.129.0)",
-    "uvicorn (>=0.40.0,<0.41.0)",
-    "pydantic (>=2.12.5,<3.0.0)",
-    "pytest (>=9.0.2,<10.0.0)",
-    "httpx (>=0.28.1,<0.29.0)"
-]
+
+[tool.poetry.dependencies]
+python = "^3.12"
+fastapi = "^0.128.0"
+uvicorn = "^0.40.0"
+pydantic = "^2.12.5"
+pytest = "^9.0.2"
+httpx = "^0.28.1"
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.14.13"
+black = "^26.1.0"
 
 [tool.pytest.ini_options]
 pythonpath = "."
-
-[dependency-groups]
-dev = [
-    "ruff (>=0.14.13,<0.15.0)",
-    "black (>=26.1.0,<27.0.0)"
-]
-
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]

@@ -1,0 +1,38 @@
+# Docker Compose for Calculator API
+# Usage:
+#   docker-compose up -d          # Start the API
+#   docker-compose run e2e-tests  # Run E2E tests against the API
+#   docker-compose down           # Stop everything
+
+services:
+  # Main API Service
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: calculator-api
+    ports:
+      - "8000:8000"
+    environment:
+      - PYTHONUNBUFFERED=1
+    healthcheck:
+      test: ["CMD", "python", "-c", "import httpx; httpx.get('http://localhost:8000/api/v1/history')"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    restart: unless-stopped
+
+  # E2E Test Runner
+  e2e-tests:
+    build:
+      context: .
+      dockerfile: Dockerfile.test
+    container_name: calculator-e2e-tests
+    environment:
+      - API_BASE_URL=http://api:8000
+    depends_on:
+      api:
+        condition: service_healthy
+    profiles:
+      - test
