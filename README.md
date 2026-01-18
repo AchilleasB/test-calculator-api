@@ -3,10 +3,10 @@
 A minimal FastAPI application for testing purposes.
 
 ## Current Status
-**Phase:** � Green (TDD Cycle)
-- Unit tests (`tests/unit`) are passing.
-- Integration tests (`tests/integration`) are passing.
-- Next Step: Refactor (Clean code, improve structure).
+**Phase:** Refactor (TDD Cycle 1 Complete)
+- Code and tests refactored (Fixtures implemented, Clean Code).
+- Calculator Service and API are stable.
+- Next Step: Implement History Feature (Red Phase).
 
 ## Setup
 ```bash

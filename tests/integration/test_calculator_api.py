@@ -1,11 +1,12 @@
 from fastapi.testclient import TestClient
 from app.main import app
+from app.api.v1.schemas import OperationType
 
 client = TestClient(app)
 
 def test_api_addition():
     payload = {
-        "operation": "addition",
+        "operation": OperationType.ADDITION.value,
         "x": 10,
         "y": 5
     }
@@ -13,11 +14,11 @@ def test_api_addition():
     assert response.status_code == 200
     data = response.json()
     assert data["result"] == 15
-    assert data["operation"] == "addition"
+    assert data["operation"] == OperationType.ADDITION.value
 
 def test_api_subtraction():
     payload = {
-        "operation": "subtraction",
+        "operation": OperationType.SUBTRACTION.value,
         "x": 10,
         "y": 5
     }
@@ -25,11 +26,11 @@ def test_api_subtraction():
     assert response.status_code == 200
     data = response.json()
     assert data["result"] == 5
-    assert data["operation"] == "subtraction"
+    assert data["operation"] == OperationType.SUBTRACTION.value
 
 def test_api_multiplication():
     payload = {
-        "operation": "multiplication",
+        "operation": OperationType.MULTIPLICATION.value,
         "x": 10,
         "y": 5
     }
@@ -37,11 +38,11 @@ def test_api_multiplication():
     assert response.status_code == 200
     data = response.json()
     assert data["result"] == 50
-    assert data["operation"] == "multiplication"
+    assert data["operation"] == OperationType.MULTIPLICATION.value
 
 def test_api_division():
     payload = {
-        "operation": "division",
+        "operation": OperationType.DIVISION.value,
         "x": 10,
         "y": 2
     }
@@ -49,11 +50,11 @@ def test_api_division():
     assert response.status_code == 200
     data = response.json()
     assert data["result"] == 5
-    assert data["operation"] == "division"
+    assert data["operation"] == OperationType.DIVISION.value
 
 def test_api_division_by_zero():
     payload = {
-        "operation": "division",
+        "operation": OperationType.DIVISION.value,
         "x": 10,
         "y": 0
     }
