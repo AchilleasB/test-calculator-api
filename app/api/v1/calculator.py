@@ -1,38 +1,59 @@
 from fastapi import APIRouter, HTTPException, Depends
 from app.api.v1.schemas import CalculationRequest, CalculationResponse, OperationType, HistoryResponse
 from app.service.calculator_service import CalculatorService
-from app.infrastructure.memory_repository import InMemoryHistoryRepository
-import uuid
-from typing import List
 
-router = APIRouter()
+router = APIRouter(tags=["calculator"])
 
-repository = InMemoryHistoryRepository()
-service = CalculatorService(repository)
+# HTTP Status Codes
+HTTP_BAD_REQUEST = 400
+
+
+def get_service() -> CalculatorService:
+    """Import here to avoid circular dependency."""
+    from app.main import get_calculator_service
+    return get_calculator_service()
+
+
+def get_repo():
+    """Import here to avoid circular dependency."""
+    from app.main import get_repository
+    return get_repository()
+
+
+# Expose repository for test cleanup
+def _get_repository_for_tests():
+    return get_repo()
+
+
+repository = property(lambda self: _get_repository_for_tests())
+
 
 @router.post("/calculate", response_model=CalculationResponse)
-def calculate(request: CalculationRequest):
-    result = 0.0
+def calculate(
+    request: CalculationRequest,
+    service: CalculatorService = Depends(get_service)
+):
+    """Perform a calculation based on the operation type."""
+    operations = {
+        OperationType.ADDITION: service.addition,
+        OperationType.SUBTRACTION: service.subtraction,
+        OperationType.MULTIPLICATION: service.multiplication,
+        OperationType.DIVISION: service.division,
+    }
     
-    if request.operation == OperationType.ADDITION:
-        result = service.addition(request.x, request.y)
-    elif request.operation == OperationType.SUBTRACTION:
-        result = service.subtraction(request.x, request.y)
-    elif request.operation == OperationType.MULTIPLICATION:
-        result = service.multiplication(request.x, request.y)
-    elif request.operation == OperationType.DIVISION:
-        try:
-            result = service.division(request.x, request.y)
-        except ZeroDivisionError as e:
-            raise HTTPException(status_code=400, detail=str(e))
+    operation_func = operations.get(request.operation)
+    
+    try:
+        result = operation_func(request.x, request.y)
+    except ZeroDivisionError as e:
+        raise HTTPException(status_code=HTTP_BAD_REQUEST, detail=str(e))
             
-    return CalculationResponse(
-        result=result,
-        operation=request.operation
-    )
+    return CalculationResponse(result=result, operation=request.operation)
+
 
 @router.get("/history", response_model=HistoryResponse)
-def get_history():
+def get_history(service: CalculatorService = Depends(get_service)):
+    """Retrieve calculation history."""
     records = service.list_history()
     return HistoryResponse(records=records)
 

@@ -1,61 +1,81 @@
 from app.repository.history_repository import HistoryRepository
-from app.api.v1.schemas import HistoryRecord
+from app.api.v1.schemas import HistoryRecord, OperationType
 from datetime import datetime
 from typing import List
 import uuid
 
-class CalculatorService:
-    def __init__(self, repository: HistoryRepository):
-        self.repository = repository
+# Error Messages
+DIVISION_BY_ZERO_ERROR = "Cannot divide by zero"
 
-    def _save_history(self, operation: str, x: float, y: float, result: float):
+# History Summary Template
+HISTORY_SUMMARY_TEMPLATE = (
+    "{x} and {y} were operated with {operation} "
+    "and the result is {result}, at {timestamp}"
+)
+
+
+class CalculatorService:
+    """Service layer for calculator operations with history tracking."""
+    
+    def __init__(self, repository: HistoryRepository):
+        self._repository = repository
+
+    def _save_history(self, operation: OperationType, x: float, y: float, result: float) -> None:
+        """Save a calculation to history."""
         entry = {
             "id": uuid.uuid4(),
-            "operation": operation,
+            "operation": operation.value,
             "x": x,
             "y": y,
             "result": result,
             "timestamp": datetime.now()
         }
-        self.repository.save(entry)
+        self._repository.save(entry)
 
     def addition(self, x: float, y: float) -> float:
+        """Add two numbers."""
         result = x + y
-        self._save_history("addition", x, y, result)
+        self._save_history(OperationType.ADDITION, x, y, result)
         return result
 
     def subtraction(self, x: float, y: float) -> float:
+        """Subtract y from x."""
         result = x - y
-        self._save_history("subtraction", x, y, result)
+        self._save_history(OperationType.SUBTRACTION, x, y, result)
         return result
 
     def multiplication(self, x: float, y: float) -> float:
+        """Multiply two numbers."""
         result = x * y
-        self._save_history("multiplication", x, y, result)
+        self._save_history(OperationType.MULTIPLICATION, x, y, result)
         return result
 
     def division(self, x: float, y: float) -> float:
-        """
+        """Divide x by y.
+        
         Note:
             If x is 0 and y is not 0, the result will be 0.0, which is mathematically valid.
-            Division is only invalid when the divisor (y) is zero, not when the dividend (x) is zero.
+            Division is only invalid when the divisor (y) is zero.
+        
+        Raises:
+            ZeroDivisionError: When y is zero.
         """
         if y == 0:
-            raise ZeroDivisionError("Cannot divide by zero")
+            raise ZeroDivisionError(DIVISION_BY_ZERO_ERROR)
         result = x / y
-        self._save_history("division", x, y, result)
+        self._save_history(OperationType.DIVISION, x, y, result)
         return result
 
     def list_history(self) -> List[HistoryRecord]:
-        history_list = self.repository.list_history()
-        records = []
-        for entry in history_list:
-            summary = (
-                f"{entry['x']} and {entry['y']} were operated with {entry['operation']} "
-                f"and the result is {entry['result']}, at {entry['timestamp']}"
+        """Retrieve all calculation history as formatted records."""
+        history_list = self._repository.list_history()
+        return [
+            HistoryRecord(
+                id=entry["id"],
+                summary=HISTORY_SUMMARY_TEMPLATE.format(**entry)
             )
-            records.append(HistoryRecord(id=entry["id"], summary=summary))
-        return records
+            for entry in history_list
+        ]
 
 
 

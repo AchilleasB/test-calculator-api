@@ -3,10 +3,14 @@
 A minimal FastAPI application for testing purposes.
 
 ## Current Status
-**Phase:** Green (Refactor/Done)
-- All features implemented: Addition, Subtraction, Multiplication, Division.
-- History feature implemented with In-Memory repository.
-- All unit and integration tests are passing.
+**Phase:** Refactor (TDD Cycle Finished)
+
+### Refactoring Applied:
+- **Dependency Injection:** Centralized in `main.py` with provider functions
+- **No Hardcoded Values:** Constants extracted (`API_VERSION`, `HTTP_BAD_REQUEST`, error messages)
+- **Strategy Pattern:** Operation dispatch using dictionary mapping
+- **Clean Architecture:** Clear separation between API, Service, and Repository layers
+- **Type Safety:** Using `OperationType` enum throughout instead of strings
 
 ## Features
 - **Arithmetic Operations:** `/api/v1/calculate`

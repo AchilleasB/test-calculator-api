@@ -1,13 +1,12 @@
 from fastapi.testclient import TestClient
-from app.main import app
-from app.api.v1.calculator import repository
+from app.main import app, get_repository
 import pytest
 
 client = TestClient(app)
 
 @pytest.fixture(autouse=True)
 def clear_history():
-    repository.clear()
+    get_repository().clear()
     yield
 
 def test_get_history_empty():
