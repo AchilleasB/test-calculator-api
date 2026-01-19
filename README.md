@@ -3,7 +3,7 @@
 A minimal FastAPI application for testing purposes.
 
 ## Current Status
-**Phase:** ✅ Complete (TDD Cycle Finished)
+**Phase:** Complete (TDD Cycle Finished)
 
 ### Refactoring Applied:
 - **Dependency Injection:** Centralized in `main.py` with provider functions
@@ -38,7 +38,7 @@ docker-compose down
 
 ## Testing
 
-### Single Command (Recommended)
+### Single Command
 ```bash
 # Using Make (Linux/Mac/WSL)
 make test              # Unit + Integration tests
@@ -54,19 +54,6 @@ scripts\test.bat e2e       # E2E tests
 # Using script (Linux/Mac)
 ./scripts/test.sh          # Unit + Integration tests
 ./scripts/test.sh unit     # Unit tests only
-```
-
-### Manual Commands
-```bash
-# Unit & Integration Tests
-poetry run pytest tests/unit tests/integration
-
-# E2E Tests (Local - start server first)
-poetry run uvicorn app.main:app &
-poetry run pytest tests/e2e -v
-
-# All Tests
-poetry run pytest
 ```
 
 ### E2E Tests (Docker)
